@@ -17,7 +17,7 @@ body {
     overflow: hidden;
 }
 
-/* title */
+/* glowing title */
 .title {
     position: absolute;
     top: 60px;
@@ -114,75 +114,92 @@ body {
 
 /* characters */
 .character {
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  position: absolute;
+  bottom: 0;
+  width: 80px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* girl */
+/* girl positioning */
 .girl {
-    left: -150px; /* start offscreen */
-    transition: left 2s ease-in-out;
+  left: 20%;
 }
-.girl.move { left: 25%; }
 
-.girl .head {
-    width: 50px; height: 50px;
-    background: #f2d1b3;
-    border-radius: 50%;
-}
-.girl .hair {
-    width: 60px; height: 30px;
-    background: black;
-    border-radius: 50% 50% 40% 40%;
-    position: relative;
-    top: -25px;
-}
-.girl .body {
-    width: 60px; height: 120px;
-    border-radius: 15px;
-    background:
-        radial-gradient(red 3px, transparent 4px),
-        white;
-    background-size: 15px 15px;
-    margin-top: -10px;
-}
-.girl .bouquet {
-    position: absolute;
-    bottom: 60px;
-    left: -40px;
-    font-size: 25px;
-    opacity: 0;
-    transition: all 1s ease;
-}
-.girl .bouquet.show { opacity: 1; left: 35px; }
-
-/* boy */
+/* boy positioning */
 .boy {
-    left: 55%;
+  left: 55%;
 }
-.boy .head {
-    width: 50px; height: 50px;
-    background: #f2d1b3;
-    border-radius: 50%;
+
+/* heads */
+.head {
+  width: 50px;
+  height: 50px;
+  background: #f2d1b3; /* lightly tanned skin */
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+}
+
+/* hair */
+.girl .hair {
+  width: 60px;
+  height: 30px;
+  background: black;
+  border-radius: 50% 50% 40% 40%;
+  position: relative;
+  top: -25px;
 }
 .boy .hair {
-    width: 55px; height: 25px;
-    background: black;
-    border-radius: 40% 40% 20% 20%;
-    position: relative;
-    top: -20px;
+  width: 55px;
+  height: 25px;
+  background: black;
+  border-radius: 40% 40% 20% 20%;
+  position: relative;
+  top: -20px;
+}
+
+/* bodies */
+.body {
+  width: 60px;
+  height: 120px;
+  border-radius: 15px;
+  margin-top: -10px;
+}
+.girl .body {
+  background:
+    radial-gradient(red 3px, transparent 4px),
+    white;
+  background-size: 15px 15px;
 }
 .boy .body {
-    width: 60px; height: 120px;
-    border-radius: 15px;
-    background:
-        radial-gradient(pink 4px, transparent 5px),
-        white;
-    background-size: 20px 20px;
-    margin-top: -10px;
+  background:
+    radial-gradient(pink 4px, transparent 5px),
+    white;
+  background-size: 20px 20px;
+}
+
+/* bouquet */
+.bouquet {
+  position: absolute;
+  bottom: 60px;
+  left: -30px;
+  opacity: 0;
+  transition: all 1s;
+}
+.showBouquet {
+  opacity: 1;
+  left: 40px;
+}
+
+/* girl move to boy */
+.kiss {
+  animation: kissMove 1s forwards;
+}
+@keyframes kissMove {
+  to { transform: translateX(40px) translateY(-20px); }
 }
 </style>
 </head>
@@ -199,18 +216,19 @@ body {
 
 <button id="moreBtn" onclick="startAnimation()">there's more for you…</button>
 
-<div id="animationScene">
-    <div class="character girl" id="girl">
-        <div class="head"></div>
-        <div class="hair"></div>
-        <div class="body"></div>
-        <div class="bouquet" id="bouquet">💐</div>
-    </div>
-    <div class="character boy" id="boy">
-        <div class="head"></div>
-        <div class="hair"></div>
-        <div class="body"></div>
-    </div>
+<div id="animationScene" style="display:none;">
+  <div class="character girl" id="girl">
+    <div class="head"></div>
+    <div class="hair"></div>
+    <div class="body"></div>
+    <div class="bouquet" id="bouquet">💐</div>
+  </div>
+
+  <div class="character boy" id="boy">
+    <div class="head"></div>
+    <div class="hair"></div>
+    <div class="body"></div>
+  </div>
 </div>
 
 <script>
@@ -240,6 +258,7 @@ let index = 0;
 
 function openLetter() {
     document.getElementById("envelope").classList.add("open");
+
     setTimeout(() => {
         document.getElementById("letter").classList.add("show");
         typeText();
@@ -281,13 +300,13 @@ function startAnimation() {
 
     // bouquet appears
     setTimeout(() => {
-        document.getElementById("bouquet").classList.add("show");
+        document.getElementById("bouquet").classList.add("showBouquet");
     }, 1000);
 
     // girl slides toward boy
     setTimeout(() => {
-        document.getElementById("girl").classList.add("move");
-    }, 1200);
+        document.getElementById("girl").classList.add("kiss");
+    }, 2500);
 
     // forehead kiss heart
     setTimeout(() => {
@@ -307,7 +326,7 @@ function startAnimation() {
         ], { duration: 1500, easing: 'ease-out' });
 
         setTimeout(() => heart.remove(), 1500);
-    }, 3000);
+    }, 4000);
 }
 </script>
 
