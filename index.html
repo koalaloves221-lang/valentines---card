@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Happy Valentines My Love 💗</title>
-
 <style>
-/* general body */
 body {
     margin: 0;
     background: linear-gradient(to bottom, #ffd6e7, #ffc0d6);
@@ -20,7 +18,7 @@ body {
 /* glowing title */
 .title {
     position: absolute;
-    top: 60px;
+    top: 50px;
     font-size: 34px;
     color: #ff4d88;
     animation: glow 2s infinite alternate;
@@ -60,7 +58,7 @@ body {
     position: absolute;
     width: 420px;
     height: 520px;
-    background: white;
+    background: #fffaf0; /* soft page color */
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 0 25px rgba(0,0,0,0.3);
@@ -76,13 +74,14 @@ body {
     white-space: pre-line;
     font-size: 19px;
     color: #444;
-    line-height: 1.6; /* book-like spacing */
+    line-height: 1.6; /* book-style spacing */
 }
 
 /* hearts */
 .heart {
     position: absolute;
     animation: fall linear infinite;
+    pointer-events: none;
 }
 @keyframes fall {
     from { transform: translateY(-10vh); opacity: 1; }
@@ -92,7 +91,8 @@ body {
 /* button */
 #moreBtn {
     position: absolute;
-    bottom: 40px;
+    right: 50px;
+    bottom: 100px;
     padding: 12px 20px;
     font-size: 18px;
     background: #ff4d88;
@@ -101,105 +101,27 @@ body {
     border-radius: 10px;
     cursor: pointer;
     display: none;
+    opacity: 0;
+    transition: opacity 1.5s;
 }
 
-/* animation scene */
-#animationScene {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 300px;
+/* video scene */
+#animationVideo {
     display: none;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.4);
 }
 
-/* characters */
-.character {
-  position: absolute;
-  bottom: 0;
-  width: 80px;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* floating hearts over video */
+#videoHearts .heart {
+    animation: floatUp linear infinite;
 }
-
-/* girl positioning */
-.girl {
-  left: 20%;
-}
-
-/* boy positioning */
-.boy {
-  left: 55%;
-}
-
-/* heads */
-.head {
-  width: 50px;
-  height: 50px;
-  background: #f2d1b3; /* lightly tanned skin */
-  border-radius: 50%;
-  position: relative;
-  z-index: 2;
-}
-
-/* hair */
-.girl .hair {
-  width: 60px;
-  height: 30px;
-  background: black;
-  border-radius: 50% 50% 40% 40%;
-  position: relative;
-  top: -25px;
-}
-.boy .hair {
-  width: 55px;
-  height: 25px;
-  background: black;
-  border-radius: 40% 40% 20% 20%;
-  position: relative;
-  top: -20px;
-}
-
-/* bodies */
-.body {
-  width: 60px;
-  height: 120px;
-  border-radius: 15px;
-  margin-top: -10px;
-}
-.girl .body {
-  background:
-    radial-gradient(red 3px, transparent 4px),
-    white;
-  background-size: 15px 15px;
-}
-.boy .body {
-  background:
-    radial-gradient(pink 4px, transparent 5px),
-    white;
-  background-size: 20px 20px;
-}
-
-/* bouquet */
-.bouquet {
-  position: absolute;
-  bottom: 60px;
-  left: -30px;
-  opacity: 0;
-  transition: all 1s;
-}
-.showBouquet {
-  opacity: 1;
-  left: 40px;
-}
-
-/* girl move to boy */
-.kiss {
-  animation: kissMove 1s forwards;
-}
-@keyframes kissMove {
-  to { transform: translateX(40px) translateY(-20px); }
+@keyframes floatUp {
+    from { transform: translateY(100vh); opacity: 0; }
+    20% { opacity: 1; }
+    to { transform: translateY(-20vh); opacity: 0; }
 }
 </style>
 </head>
@@ -214,22 +136,15 @@ body {
   <div id="typedText"></div>
 </div>
 
-<button id="moreBtn" onclick="startAnimation()">there's more for you…</button>
+<button id="moreBtn" onclick="playVideo()">there's more for you…</button>
 
-<div id="animationScene" style="display:none;">
-  <div class="character girl" id="girl">
-    <div class="head"></div>
-    <div class="hair"></div>
-    <div class="body"></div>
-    <div class="bouquet" id="bouquet">💐</div>
-  </div>
+<!-- Video -->
+<video id="animationVideo" autoplay muted playsinline>
+  <source src="animation.mp4" type="video/mp4">
+</video>
 
-  <div class="character boy" id="boy">
-    <div class="head"></div>
-    <div class="hair"></div>
-    <div class="body"></div>
-  </div>
-</div>
+<!-- Floating hearts container for video -->
+<div id="videoHearts"></div>
 
 <script>
 const message = `To my love,
@@ -246,7 +161,9 @@ because you mean everything to me.
 Thank you for loving me the way you do.
 You make everything feel easier just by being you.
 
-Thank you for being patient with me, for listening to me, and for staying by my side no matter what. You’re my comfort, my safe place, and my favorite person.
+Thank you for being patient with me,for listening to me,
+and for staying by my side no matter what.
+You’re my comfort, my safe place, and my favorite person.
 
 im so greatful that you are mine <3
 
@@ -272,7 +189,9 @@ function typeText() {
         index++;
         setTimeout(typeText, 55); // slower typing
     } else {
-        document.getElementById("moreBtn").style.display = "block";
+        const btn = document.getElementById("moreBtn");
+        btn.style.display = "block";
+        setTimeout(() => { btn.style.opacity = 1; }, 100); // fade in
     }
 }
 
@@ -289,44 +208,36 @@ function createHearts() {
     }, 300);
 }
 
-function startAnimation() {
-    // fade out letter
-    let letter = document.getElementById("letter");
-    letter.style.opacity = 0;
+function playVideo() {
+    // fade out everything
+    document.getElementById("letter").style.opacity = 0;
+    document.getElementById("envelope").style.opacity = 0;
+    document.querySelector(".title").style.opacity = 0;
+    document.getElementById("moreBtn").style.opacity = 0;
 
-    // show animation scene
-    let scene = document.getElementById("animationScene");
-    scene.style.display = "block";
-
-    // bouquet appears
     setTimeout(() => {
-        document.getElementById("bouquet").classList.add("showBouquet");
-    }, 1000);
+        // hide letter/envelope/button completely
+        document.getElementById("letter").style.display = "none";
+        document.getElementById("envelope").style.display = "none";
+        document.querySelector(".title").style.display = "none";
+        document.getElementById("moreBtn").style.display = "none";
 
-    // girl slides toward boy
-    setTimeout(() => {
-        document.getElementById("girl").classList.add("kiss");
-    }, 2500);
+        // show video
+        const video = document.getElementById("animationVideo");
+        video.style.display = "block";
 
-    // forehead kiss heart
-    setTimeout(() => {
-        let heart = document.createElement("div");
-        heart.innerHTML = "💖";
-        heart.style.position = "absolute";
-        heart.style.fontSize = "30px";
-        heart.style.left = "58%";
-        heart.style.bottom = "140px";
-        heart.style.opacity = 0;
-        document.body.appendChild(heart);
+        // add floating hearts
+        const heartsContainer = document.getElementById("videoHearts");
+        for (let i=0;i<15;i++) {
+            let heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "💖";
+            heart.style.left = Math.random()*90 + "vw";
+            heart.style.fontSize = (Math.random()*25 + 15) + "px";
+            heartsContainer.appendChild(heart);
+        }
 
-        heart.animate([
-            { transform: 'translateY(0px)', opacity: 0 },
-            { transform: 'translateY(-30px)', opacity: 1 },
-            { transform: 'translateY(-60px)', opacity: 0 }
-        ], { duration: 1500, easing: 'ease-out' });
-
-        setTimeout(() => heart.remove(), 1500);
-    }, 4000);
+    }, 1000); // fade out duration
 }
 </script>
 
