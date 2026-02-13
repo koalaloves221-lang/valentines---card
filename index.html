@@ -112,16 +112,22 @@ body {
     max-width: 800px;
     border-radius: 12px;
     box-shadow: 0 0 30px rgba(0,0,0,0.4);
+    position: relative;
 }
 
 /* floating hearts over video */
+#videoHearts {
+    position: absolute;
+    pointer-events: none;
+    overflow: hidden;
+}
 #videoHearts .heart {
     animation: floatUp linear infinite;
 }
 @keyframes floatUp {
-    from { transform: translateY(100vh); opacity: 0; }
+    from { transform: translateY(100%); opacity: 0; }
     20% { opacity: 1; }
-    to { transform: translateY(-20vh); opacity: 0; }
+    to { transform: translateY(-20%); opacity: 0; }
 }
 </style>
 </head>
@@ -161,9 +167,7 @@ because you mean everything to me.
 Thank you for loving me the way you do.
 You make everything feel easier just by being you.
 
-Thank you for being patient with me,for listening to me,
-and for staying by my side no matter what.
-You’re my comfort, my safe place, and my favorite person.
+Thank you for being patient with me, for listening to me, and for staying by my side no matter what. You’re my comfort, my safe place, and my favorite person.
 
 im so greatful that you are mine <3
 
@@ -195,12 +199,13 @@ function typeText() {
     }
 }
 
+// Hearts during letter typing (full screen)
 function createHearts() {
     setInterval(() => {
         let heart = document.createElement("div");
         heart.innerHTML = "💗";
         heart.className = "heart";
-        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.left = Math.random() * window.innerWidth + "px";
         heart.style.fontSize = (Math.random() * 20 + 15) + "px";
         heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
         document.body.appendChild(heart);
@@ -226,14 +231,21 @@ function playVideo() {
         const video = document.getElementById("animationVideo");
         video.style.display = "block";
 
-        // add floating hearts
+        // position hearts container exactly over video
         const heartsContainer = document.getElementById("videoHearts");
-        for (let i=0;i<15;i++) {
+        const rect = video.getBoundingClientRect();
+        heartsContainer.style.width = rect.width + "px";
+        heartsContainer.style.height = rect.height + "px";
+        heartsContainer.style.left = rect.left + "px";
+        heartsContainer.style.top = rect.top + "px";
+
+        // create hearts inside video container only
+        for (let i = 0; i < 15; i++) {
             let heart = document.createElement("div");
             heart.className = "heart";
             heart.innerHTML = "💖";
-            heart.style.left = Math.random()*90 + "vw";
-            heart.style.fontSize = (Math.random()*25 + 15) + "px";
+            heart.style.left = Math.random() * rect.width + "px";
+            heart.style.fontSize = (Math.random() * 25 + 15) + "px";
             heartsContainer.appendChild(heart);
         }
 
