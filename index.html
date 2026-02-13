@@ -114,21 +114,6 @@ body {
     box-shadow: 0 0 30px rgba(0,0,0,0.4);
     position: relative;
 }
-
-/* floating hearts over video */
-#videoHearts {
-    position: absolute;
-    pointer-events: none;
-    overflow: hidden;
-}
-#videoHearts .heart {
-    animation: floatUp linear infinite;
-}
-@keyframes floatUp {
-    from { transform: translateY(100%); opacity: 0; }
-    20% { opacity: 1; }
-    to { transform: translateY(-20%); opacity: 0; }
-}
 </style>
 </head>
 
@@ -149,31 +134,30 @@ body {
   <source src="animation.mp4" type="video/mp4">
 </video>
 
-<!-- Floating hearts container for video -->
-<div id="videoHearts"></div>
-
 <script>
 const message = `
-Happy valentines dayyyyyyyyyyyy 
-      💗💗💗💗💗💗💗
+
+HAPPY VALENTINES DAYYYYYYYYYYYY
+    💗💗💗💗💗💗💗💗💗
 
 You are my first valentine and
 I wish that you'd be my only valentine.
 Forever. hehe
 
 I made this just for you,
-because you mean everything to me.
+because you mean alot to me.
 
 Thank you for loving me the way you do.
 You make everything feel easier just by being you.
 
-Thank you for being patient with me, for listening to me, and for staying by my side no matter what. You’re my comfort, my safe place, and my favorite person.
+Thank you for being patient with me, for listening to me, and for staying by my side no matter what. 
+You’re my comfort, my safe place, and my favoriteeeeeee person.
 
-im so greatful that you are mine <3
+Im so greatful that you are mineeee <3333
 
 I love you so so sooo muchhhhhhh!!!!!!
 
-— yours 💌`;
+- 💌`;
 
 let index = 0;
 
@@ -191,15 +175,15 @@ function typeText() {
     if (index < message.length) {
         document.getElementById("typedText").innerHTML += message.charAt(index);
         index++;
-        setTimeout(typeText, 55); // slower typing
+        setTimeout(typeText, 55);
     } else {
         const btn = document.getElementById("moreBtn");
         btn.style.display = "block";
-        setTimeout(() => { btn.style.opacity = 1; }, 100); // fade in
+        setTimeout(() => { btn.style.opacity = 1; }, 100);
     }
 }
 
-// Hearts during letter typing (full screen)
+// Hearts during letter typing
 function createHearts() {
     setInterval(() => {
         let heart = document.createElement("div");
@@ -210,6 +194,43 @@ function createHearts() {
         heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
         document.body.appendChild(heart);
         setTimeout(() => heart.remove(), 6000);
+    }, 300);
+}
+
+// Hearts only outside video frame
+function createHeartsOutsideVideo(video) {
+    const rect = video.getBoundingClientRect();
+
+    setInterval(() => {
+        let heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "💖";
+        heart.style.fontSize = (Math.random() * 25 + 15) + "px";
+
+        let side = Math.floor(Math.random() * 4);
+        switch(side) {
+            case 0: // top
+                heart.style.left = Math.random() * window.innerWidth + "px";
+                heart.style.top = Math.random() * rect.top + "px";
+                break;
+            case 1: // bottom
+                heart.style.left = Math.random() * window.innerWidth + "px";
+                heart.style.top = rect.bottom + Math.random() * (window.innerHeight - rect.bottom) + "px";
+                break;
+            case 2: // left
+                heart.style.left = Math.random() * rect.left + "px";
+                heart.style.top = Math.random() * window.innerHeight + "px";
+                break;
+            case 3: // right
+                heart.style.left = rect.right + Math.random() * (window.innerWidth - rect.right) + "px";
+                heart.style.top = Math.random() * window.innerHeight + "px";
+                break;
+        }
+
+        document.body.appendChild(heart);
+        heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        setTimeout(() => heart.remove(), 6000);
+
     }, 300);
 }
 
@@ -231,11 +252,10 @@ function playVideo() {
         const video = document.getElementById("animationVideo");
         video.style.display = "block";
 
+        // start hearts around video
+        createHeartsOutsideVideo(video);
 
-    
-        }
-
-    }, 1000); // fade out duration
+    }, 1000);
 }
 </script>
 
