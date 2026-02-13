@@ -230,13 +230,6 @@ function playVideo() {
         const video = document.getElementById("animationVideo");
         video.style.display = "block";
 
-        // position hearts container exactly over video
-        const heartsContainer = document.getElementById("videoHearts");
-        const rect = video.getBoundingClientRect();
-        heartsContainer.style.width = rect.width + "px";
-        heartsContainer.style.height = rect.height + "px";
-        heartsContainer.style.left = rect.left + "px";
-        heartsContainer.style.top = rect.top + "px";
 
         // create hearts inside video container only
         for (let i = 0; i < 15; i++) {
